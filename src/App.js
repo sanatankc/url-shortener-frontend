@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import LinkBox from './components/LinkBox'
 import generateShortCodeByURL from './api/generateShortCodeByURL'
 import { UNVALID_URL_ERROR } from './CONSTANTS'
-import { boxShadow, size, center } from './utils'
+import { boxShadow } from './utils'
 import logo from './logo.svg'
 import link from './link.svg'
+import URListButton from './components/URListButton'
 
 const NavBar = styled.div`
   display: flex;
@@ -69,16 +70,6 @@ const SearchButton = styled.button`
 const ColumnReverse = styled.div`
   display: flex;
   flex-direction: column-reverse;
-`
-const URListButton = styled.div`
-  position: fixed;
-  width: 80px;
-  height: 80px;
-  bottom: 30px;
-  right: 30px;
-  border-radius: 50%;
-  background: white;
-  box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
 `
 
 class App extends Component {
