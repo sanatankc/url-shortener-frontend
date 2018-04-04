@@ -100,17 +100,29 @@ class App extends Component {
 
   async onFormSubmit(e) {
     const url = this.state.searchText
-    const data = await generateShortCodeByURL(url)
-    if (data.error === UNVALID_URL_ERROR) {
-      console.error('invalid url')
-    } else if (data.error) {
-      console.error('some problems with the api call')
-    } else {
-      const shortCode = data.shortcode
-      this.setState(prev => ({urlList: [...prev.urlList, { url, shortCode }]}), () => {
-        localStorage.setItem('urlList', JSON.stringify(this.state.urlList))
-      })
+    if (url !== '') {
+      const data = await generateShortCodeByURL(url)
+      if (data.error === UNVALID_URL_ERROR) {
+        console.error('invalid url')
+      } else if (data.error) {
+        console.error('some problems with the api call')
+      } else {
+        const shortCode = data.shortcode
+        this.setState(prev => ({urlList: [...prev.urlList, { url, shortCode }]}), () => {
+          localStorage.setItem('urlList', JSON.stringify(this.state.urlList))
+        })
+      }
     }
+  }
+
+  renderLinkBox() {
+    const { urlList } = this.state
+    const lastItemIndex = urlList.length - 1
+    return (
+      urlList.map((data, index) =>
+        <LinkBox {...data} shouldVisible={index === lastItemIndex} key={data.shortCode} />
+      )
+    )
   }
 
   render() {
@@ -137,7 +149,7 @@ class App extends Component {
             </SearchButton>
           </SearchBar>
           <ColumnReverse>
-            {this.state.urlList.map(data => <LinkBox {...data} />)}
+            {this.renderLinkBox()}
           </ColumnReverse>
         </Flex>
         <URListButton />
