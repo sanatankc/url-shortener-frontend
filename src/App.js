@@ -108,7 +108,10 @@ class App extends Component {
         console.error('some problems with the api call')
       } else {
         const shortCode = data.shortcode
-        this.setState(prev => ({urlList: [...prev.urlList, { url, shortCode }]}), () => {
+        this.setState(prev => ({
+          urlList: [...prev.urlList, { url, shortCode }],
+          searchText: ''
+        }), () => {
           localStorage.setItem('urlList', JSON.stringify(this.state.urlList))
         })
       }
@@ -135,6 +138,7 @@ class App extends Component {
           <SearchBar>
             <SearchInput
               placeholder='Shorten your links'
+              value={this.state.searchText}
               onKeyDown={e => {
                 if (e.key === 'Enter') {
                   this.onFormSubmit()
