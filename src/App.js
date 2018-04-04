@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
+import { withRouter } from 'react-router-dom'
 import LinkBox from './components/LinkBox'
 import generateShortCodeByURL from './api/generateShortCodeByURL'
 import { UNVALID_URL_ERROR } from './CONSTANTS'
@@ -96,6 +97,7 @@ class App extends Component {
     if (urlList !== null) {
       this.setState({ urlList })
     }
+    console.log(this.props)
   }
 
   async onFormSubmit(e) {
@@ -162,4 +164,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default withRouter(App)
