@@ -164,8 +164,8 @@ class App extends Component {
             {this.renderLinkBox()}
           </ColumnReverse>
         </Flex>
-        <Link to='/urls'>
-          <URListButton />
+        <Link to={pathname === '/' ? '/urls' : '/'}>
+          <URListButton isBackIcon={routeObj[pathname].isBackIcon} />
         </Link>
       </div>
     )
