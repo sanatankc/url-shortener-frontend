@@ -142,7 +142,7 @@ class App extends Component {
               }}
             ></SearchInput>
             <SearchButton onClick={this.onFormSubmit}>
-              <img src={link} />
+              <img src={link} alt='Search Icon' />
             </SearchButton>
           </SearchBar>
           <ColumnReverse>
