@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import LinkBox from './components/LinkBox'
 import generateShortCodeByURL from './api/generateShortCodeByURL'
 import { UNVALID_URL_ERROR } from './CONSTANTS'
 import { boxShadow } from './utils'
+import routeObj from './routeObj'
 import logo from './logo.svg'
 import link from './link.svg'
 import URListButton from './components/URListButton'
@@ -32,6 +33,8 @@ const SearchBar = styled.div`
   max-width: 500px;
   height: 50px;
   margin-bottom: 30px;
+  transition: 0.3s all ease-in-out;
+  opacity: ${props => props.opacity}
 `
 const SearchInput = styled.input`
   display: block;
@@ -114,21 +117,33 @@ class App extends Component {
   renderLinkBox() {
     const { urlList } = this.state
     const lastItemIndex = urlList.length - 1
+    const { pathname } = this.props.location
+    const shouldVisible = pathname === '/urls'
     return (
-      urlList.map((data, index) =>
-        <LinkBox {...data} shouldVisible={index === lastItemIndex} key={data.shortCode} />
-      )
+      urlList.map((data, index) => {
+        const transitionDelay = `0.${urlList.length - index}s`
+        return (
+          <LinkBox
+            {...data}
+            shouldVisible={index === lastItemIndex || shouldVisible}
+            key={data.shortCode}
+            transform={routeObj[pathname].linkBoxTransform}
+            transitionDelay={transitionDelay}
+          />
+        )
+      })
     )
   }
 
   render() {
+    const { pathname } = this.props.location
     return (
       <div>
         <NavBar>
           <Logo src={logo} />
         </NavBar>
         <Flex>
-          <SearchBar>
+          <SearchBar opacity={routeObj[pathname].searchBarOpacity}>
             <SearchInput
               placeholder='Shorten your links'
               value={this.state.searchText}
@@ -149,7 +164,9 @@ class App extends Component {
             {this.renderLinkBox()}
           </ColumnReverse>
         </Flex>
-        <URListButton />
+        <Link to='/urls'>
+          <URListButton />
+        </Link>
       </div>
     )
   }

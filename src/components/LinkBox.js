@@ -13,6 +13,8 @@ const URLContainer = styled.div`
   margin-bottom: 30px;
   opacity: ${props => props.shouldVisible ? '1' : '0'};
   transition: 0.3s all ease-in-out;
+  transform: translateY(${props => props.transform});
+  transition-delay: ${props => props.transitionDelay};
 `
 const OriginalURL = styled.div`
   font-size: 24px;
@@ -56,7 +58,7 @@ const Icon = styled.div`
 `
 
 const LinkBox = props => (
-  <URLContainer shouldVisible={props.shouldVisible}>
+  <URLContainer shouldVisible={props.shouldVisible} {...props}>
       <OriginalURL>{props.url}</OriginalURL>
       <SecondRow>
         <ShortURL>https://short.sh/{props.shortCode}</ShortURL>
