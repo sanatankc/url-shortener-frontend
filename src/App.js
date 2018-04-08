@@ -9,7 +9,12 @@ import routeObj from './routeObj'
 import logo from './logo.svg'
 import link from './link.svg'
 import URListButton from './components/URListButton'
+import Status from './components/Status'
 
+const Wrapper = styled.div`
+  height: 100vh;
+  overflow: ${props => props.wrapperScroll};
+`
 const NavBar = styled.div`
   display: flex;
   align-items: center;
@@ -32,7 +37,7 @@ const SearchBar = styled.div`
   width: calc(100vw - 20px);
   max-width: 500px;
   height: 50px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   transition: 0.3s all ease-in-out;
   opacity: ${props => props.opacity}
 `
@@ -75,6 +80,19 @@ const ColumnReverse = styled.div`
   flex-direction: column-reverse;
 `
 
+const statusText = {
+  shortingURL: 'Shorting URL...',
+  invalidURL: 'URL is not valid',
+  notFetch: `Couldn't short URL, There might be some problem`,
+  shortSuccess: 'URl is shorted',
+}
+
+const STATUS_COLORS = {
+  TEXT: '#444',
+  ERROR: 'red',
+  SUCCESS: 'green'
+}
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -83,7 +101,10 @@ class App extends Component {
 
   state = {
     searchText: '',
-    urlList: []
+    urlList: [],
+    statusType: 'TEXT',
+    statusText: '',
+    shouldStatusVisible: false,
   }
 
   componentDidMount() {
@@ -97,21 +118,54 @@ class App extends Component {
   async onFormSubmit(e) {
     const url = this.state.searchText
     if (url !== '') {
+      this.setState({
+        shouldStatusVisible: true,
+        statusText: statusText.shortingURL ,
+        statusType: 'TEXT'
+      })
       const data = await generateShortCodeByURL(url)
       if (data.error === UNVALID_URL_ERROR) {
-        console.error('invalid url')
+        this.setState({
+          searchText: '',
+          statusText: statusText.invalidURL,
+          statusType: 'ERROR'
+        })
+        this.clearStatus()
       } else if (data.error) {
-        console.error('some problems with the api call')
+        this.setState({
+          searchText: '',
+          statusText: statusText.notFetch,
+          statusType: 'ERROR'
+        })
+        this.clearStatus()
       } else {
         const shortCode = data.shortcode
         this.setState(prev => ({
           urlList: [...prev.urlList, { url, shortCode }],
-          searchText: ''
+          searchText: '',
+          statusText: statusText.shortSuccess,
+          statusType: 'SUCCESS'
         }), () => {
           localStorage.setItem('urlList', JSON.stringify(this.state.urlList))
+          this.clearStatus()
         })
       }
     }
+  }
+
+  clearStatus() {
+    setTimeout(() => {
+      this.setState({
+        shouldStatusVisible: false,
+      }, () => {
+        setTimeout(() => {
+          this.setState({
+            statusText: '',
+            statusType: 'TEXT',
+          })
+        }, 400)
+      })
+    }, 3000)
   }
 
   renderLinkBox() {
@@ -138,7 +192,7 @@ class App extends Component {
   render() {
     const { pathname } = this.props.location
     return (
-      <div>
+      <Wrapper>
         <NavBar>
           <Logo src={logo} />
         </NavBar>
@@ -160,6 +214,11 @@ class App extends Component {
               <img src={link} alt='Search Icon' />
             </SearchButton>
           </SearchBar>
+          <Status
+            text={this.state.statusText}
+            color={STATUS_COLORS[this.state.statusType]}
+            shouldVisible={this.state.shouldStatusVisible}
+          />
           <ColumnReverse>
             {this.renderLinkBox()}
           </ColumnReverse>
@@ -167,7 +226,7 @@ class App extends Component {
         <Link to={pathname === '/' ? '/urls' : '/'}>
           <URListButton isBackIcon={routeObj[pathname].isBackIcon} />
         </Link>
-      </div>
+      </Wrapper>
     )
   }
 }
