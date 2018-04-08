@@ -105,6 +105,7 @@ class App extends Component {
     statusType: 'TEXT',
     statusText: '',
     shouldStatusVisible: false,
+    hostname: ''
   }
 
   componentDidMount() {
@@ -113,6 +114,7 @@ class App extends Component {
       this.setState({ urlList })
     }
     console.log(this.props)
+    this.setState({hostname: window.location.host})
   }
 
   async onFormSubmit(e) {
@@ -183,6 +185,7 @@ class App extends Component {
             key={data.shortCode}
             transform={routeObj[pathname].linkBoxTransform}
             transitionDelay={transitionDelay}
+            hostname={this.state.hostname}
           />
         )
       })

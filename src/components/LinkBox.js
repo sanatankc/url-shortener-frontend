@@ -57,27 +57,34 @@ const Icon = styled.div`
   }
 `
 
-const LinkBox = props => (
-  <URLContainer shouldVisible={props.shouldVisible} {...props}>
-      <OriginalURL>{props.url}</OriginalURL>
-      <SecondRow>
-        <ShortURL>https://short.sh/{props.shortCode}</ShortURL>
-        <div style={{flex: '1'}}>
-          <Icon>
-            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
-          </Icon>
-        </div>
-          <Icon>
-            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-            </svg>
-          </Icon>
-      </SecondRow>
-    </URLContainer>
-)
+const LinkBox = props => {
+  const shortUrl = `https://${props.hostname}/${props.shortCode}`
+  const onOpenLinkClick = () => {
+    window.open(shortUrl, '_blank')
+  }
+
+  return (
+    <URLContainer shouldVisible={props.shouldVisible} {...props}>
+        <OriginalURL>{props.url}</OriginalURL>
+        <SecondRow>
+          <ShortURL>{shortUrl}</ShortURL>
+          <div style={{flex: '1'}}>
+            <Icon>
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+              </svg>
+            </Icon>
+          </div>
+            <Icon onClick={onOpenLinkClick}>
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+              </svg>
+            </Icon>
+        </SecondRow>
+      </URLContainer>
+  )
+}
 
 export default LinkBox
