@@ -192,7 +192,7 @@ class App extends Component {
   render() {
     const { pathname } = this.props.location
     return (
-      <Wrapper>
+      <Wrapper wrapperScroll={routeObj[pathname].wrapperScroll}>
         <NavBar>
           <Logo src={logo} />
         </NavBar>
