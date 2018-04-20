@@ -113,7 +113,6 @@ class App extends Component {
     if (urlList !== null) {
       this.setState({ urlList })
     }
-    console.log(this.props)
     this.setState({hostname: window.location.host})
   }
 
